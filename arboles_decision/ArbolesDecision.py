@@ -20,8 +20,8 @@ data = np.array(data)
 
 # split the data
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25)
-
-model = DecisionTreeClassifier(random_state=1)
+# create the model
+model = DecisionTreeClassifier(random_state=10)
 
 # set the number of folds
 folds = range(1, 10)
@@ -29,14 +29,14 @@ folds = range(1, 10)
 # train the model with folds
 for j in folds:
     print('\nFold ', j)
-    # split the data
-    x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25)
     # fit model
     model.fit(x_train, y_train)
     # test the model
     y_pred = model.predict(x_test)
     # Calculate the absolute errors
     print(f'Model Accuracy: {model.score(x_test, y_test)}')
+    # split the data
+    x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25)
 
 y_pred = model.predict(x_test)
 # Calculate the absolute errors
