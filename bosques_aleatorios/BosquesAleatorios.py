@@ -36,29 +36,18 @@ folds = range(1, 10)
 # train the model with folds
 for j in folds:
     print('\nFold ', j)
+    print('\nDatos de prueba', x_test, y_test)
     # fit model
     model.fit(x_train, y_train)
     # test the model
     y_pred = model.predict(x_test)
     # Calculate the absolute errors
-    errors = abs(y_pred - y_test)
-    # Calculate mean absolute percentage error (MAPE)
-    mape = 100 * (errors / y_test)
-    # Calculate and display accuracy
-    accuracy = 100 - np.mean(mape)
-    print('Accuracy:', round(accuracy, 2), '%.')
-    print('Error:', round(100 - accuracy, 2), '%.')
+    print(f'Model Accuracy: {model.score(x_test, y_test)}')
     # split the data
     x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25)
 
 y_pred = model.predict(x_test)
 # Calculate the absolute errors
-errors = abs(y_pred - y_test)
-# Calculate mean absolute percentage error (MAPE)
-mape = 100 * (errors / y_test)
-# Calculate and display accuracy
-accuracy = 100 - np.mean(mape)
-print('Accuracy:', round(accuracy, 2), '%.')
-print('Error:', round(100 - accuracy, 2), '%.')
+print(f'Model Accuracy: {model.score(x_test, y_test)}')
 # create the confusion matrix
 print(confusion_matrix(y_true=y_test, y_pred=y_pred))

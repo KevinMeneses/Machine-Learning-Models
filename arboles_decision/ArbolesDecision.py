@@ -29,6 +29,7 @@ folds = range(1, 10)
 # train the model with folds
 for j in folds:
     print('\nFold ', j)
+    print('\nDatos de prueba', x_test, y_test)
     # fit model
     model.fit(x_train, y_train)
     # test the model
