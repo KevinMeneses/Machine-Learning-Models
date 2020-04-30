@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix
 
 # load dataset from csv file
@@ -18,17 +18,10 @@ data_list = list(data.columns)
 # Convert to numpy array
 data = np.array(data)
 
-
 # split the data
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25)
-
-model = RandomForestClassifier(
-    random_state=1,  # semilla inicial de aleatoriedad del algoritmo
-    n_estimators=1000,  # cantidad de arboles a crear
-    min_samples_split=2,  # cantidad minima de observaciones para dividir un nodo
-    min_samples_leaf=1,  # observaciones minimas que puede tener una hoja del arbol
-    n_jobs=-1  # tareas en paralelo. para todos los cores disponibles usar -1
-)
+# create the model
+model = SVC(kernel='linear', gamma='auto')
 
 # set the number of folds
 folds = range(1, 10)
