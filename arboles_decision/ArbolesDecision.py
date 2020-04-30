@@ -28,19 +28,21 @@ folds = range(1, 10)
 
 # train the model with folds
 for j in folds:
-    print('\nFold ', j)
+    print('\nConstruyendo Fold ', j)
     print('\nDatos de prueba', x_test, y_test)
     # fit model
     model.fit(x_train, y_train)
     # test the model
     y_pred = model.predict(x_test)
     # Calculate the absolute errors
-    print(f'Model Accuracy: {model.score(x_test, y_test)}')
+    print(f'\nPrecisión del Modelo: {model.score(x_test, y_test)}')
     # split the data
     x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25)
 
+print("\n\nConstruyendo el modelo final...")
 y_pred = model.predict(x_test)
 # Calculate the absolute errors
-print(f'Model Accuracy: {model.score(x_test, y_test)}')
+print(f'Precisión del Modelo: {model.score(x_test, y_test)}')
 # create the confusion matrix
+print("\n\nMatriz de Confusión:\n")
 print(confusion_matrix(y_true=y_test, y_pred=y_pred))
