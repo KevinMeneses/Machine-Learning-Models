@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
+import ParametrosEfectividad
 
 # load dataset from csv file
 data = pd.read_csv("D:/Proyecto/datosfinal.csv")
@@ -41,8 +42,12 @@ for j in folds:
 
 print("\n\nConstruyendo el modelo final...")
 y_pred = model.predict(x_test)
-# Calculate the absolute errors
+
 print(f'Precisión del Modelo: {model.score(x_test, y_test)}')
-# create the confusion matrix
+
 print("\n\nMatriz de Confusión:\n")
-print(confusion_matrix(y_true=y_test, y_pred=y_pred))
+mc = confusion_matrix(y_test, y_pred)
+print(mc)
+
+print("\n\nParámetros de Efectividad:\n")
+ParametrosEfectividad.print_stats(mc)
