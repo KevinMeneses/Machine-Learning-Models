@@ -1,53 +1,35 @@
 import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import confusion_matrix
-import ParametrosEfectividad
+from sklearn.tree import DecisionTreeClassifier
+from utiles import ParametrosEfectividad
 
-# load dataset from csv file
-data = pd.read_csv("D:/Proyecto/datosfinal.csv")
+data = pd.read_csv("D:/Proyecto/DatasetsFinales/DatosEval.csv", index_col=0)
 
-# One-hot encode the data using pandas get_dummies
-data = pd.get_dummies(data)
+X = data.values
 # set the dependent variable
-labels = np.array(data['Actividad'])
-# Remove the labels from the features
-data = data.drop('Actividad', axis=1)
-# Saving feature names for later use
-data_list = list(data.columns)
-# Convert to numpy array
-data = np.array(data)
+y = data.index.values
 
-# split the data
-x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25)
+skf = StratifiedKFold(n_splits=10)
+skf.get_n_splits(X, y)
+
 # create the model
 model = DecisionTreeClassifier(random_state=10)
 
-# set the number of folds
-folds = range(1, 10)
+y_pred = []
+y_test = []
 
-# train the model with folds
-for j in folds:
-    print('\nConstruyendo Fold ', j)
-    print('\nDatos de prueba', x_test, y_test)
+for train_index, test_index in skf.split(X, y):
+    X_train, X_test = X[train_index, :], X[test_index, :]
+    y_train, y_test = y[train_index], y[test_index]
+
+    print('\nConstruyendo Fold ')
     # fit model
-    model.fit(x_train, y_train)
+    model.fit(X_train, y_train)
     # test the model
-    y_pred = model.predict(x_test)
+    y_pred = model.predict(X_test)
     # Calculate the absolute errors
-    print(f'\nPrecisión del Modelo: {model.score(x_test, y_test)}')
-    # split the data
-    x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.25)
-
-print("\n\nConstruyendo el modelo final...")
-y_pred = model.predict(x_test)
-
-print(f'Precisión del Modelo: {model.score(x_test, y_test)}')
-
-print("\n\nMatriz de Confusión:\n")
-mc = confusion_matrix(y_test, y_pred)
-print(mc)
-
-print("\n\nParámetros de Efectividad:\n")
-ParametrosEfectividad.print_stats(mc)
+    print(f'\nPrecisión del Modelo: {model.score(X_test, y_test)}')
+    mc = confusion_matrix(y_true=y_test, y_pred=y_pred)
+    print("\nParámetros de Efectividad:\n")
+    ParametrosEfectividad.print_stats(mc)
